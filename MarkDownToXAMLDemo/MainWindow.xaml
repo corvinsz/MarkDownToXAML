@@ -10,18 +10,63 @@
         Height="450"
         Style="{StaticResource MaterialDesignWindow}"
         mc:Ignorable="d">
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="3" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="0"
-                HorizontalAlignment="Stretch"
-                Click="Button_Click"
-                Content="Parse" />
 
-        <ContentPresenter x:Name="svContent" Grid.Row="1" />
+        <GroupBox Grid.Column="0"
+                  Margin="10"
+                  Style="{StaticResource MaterialDesignCardGroupBox}">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+                                             Height="40"
+                                             Kind="LanguageMarkdown" />
+                    <TextBlock Margin="10,0,0,0"
+                               Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                               Text="Markdown" />
+                </StackPanel>
+            </GroupBox.Header>
+            <TextBox AcceptsReturn="True"
+                     AcceptsTab="True"
+                     Text="{Binding MarkdownText, UpdateSourceTrigger=PropertyChanged, Delay=1000}" />
+        </GroupBox>
+
+        <GridSplitter Grid.Column="1"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="{DynamicResource MaterialDesign.Brush.Primary}" />
+
+        <TabControl Grid.Column="2"
+                    Padding="10"
+                    Style="{StaticResource MaterialDesignFilledTabControl}">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="TelevisionGuide" />
+                        <TextBlock Text="UI" />
+                    </StackPanel>
+                </TabItem.Header>
+                <ContentPresenter Content="{Binding GeneratedXAML}" />
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Xml" />
+                        <TextBlock Text="XAML" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock Text="{Binding GeneratedXAMLCode}" />
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </Window>
