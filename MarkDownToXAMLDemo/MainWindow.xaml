@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:MarkDownToXAMLDemo"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="MainWindow"
+        Title="MarkDownToXAMLDemo"
         Width="800"
         Height="450"
         Style="{StaticResource MaterialDesignWindow}"
@@ -51,20 +51,32 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="TelevisionGuide" />
-                        <TextBlock Text="UI" />
+                        <materialDesign:PackIcon Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+                                                 Height="30"
+                                                 Kind="TelevisionGuide" />
+                        <TextBlock Margin="10,0,0,0"
+                                   FontSize="24"
+                                   Text="UI" />
                     </StackPanel>
                 </TabItem.Header>
-                <ContentPresenter Content="{Binding GeneratedXAML}" />
+                <ScrollViewer HorizontalScrollBarVisibility="auto" VerticalScrollBarVisibility="Auto">
+                    <ContentPresenter Content="{Binding GeneratedXAML}" />
+                </ScrollViewer>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Xml" />
-                        <TextBlock Text="XAML" />
+                        <materialDesign:PackIcon Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+                                                 Height="30"
+                                                 Kind="Xml" />
+                        <TextBlock Margin="10,0,0,0"
+                                   FontSize="24"
+                                   Text="XAML" />
                     </StackPanel>
                 </TabItem.Header>
-                <TextBlock Text="{Binding GeneratedXAMLCode}" />
+                <ScrollViewer HorizontalScrollBarVisibility="auto" VerticalScrollBarVisibility="Auto">
+                    <TextBlock Text="{Binding GeneratedXAMLCode}" />
+                </ScrollViewer>
             </TabItem>
         </TabControl>
 
