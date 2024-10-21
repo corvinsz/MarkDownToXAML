@@ -15,7 +15,7 @@ This is a very basic parsing library, so currently only the following markdown s
 - [x] Item 2
 
 # Bold
-**Bold text*
+**Bold text**
 
 # Italic
 *italic text*
