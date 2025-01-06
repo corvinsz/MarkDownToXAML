@@ -1,5 +1,5 @@
 A library to convert basic Markdown to XAML.
-![image](https://github.com/user-attachments/assets/1322e46a-9a56-408c-900b-244bf586ab21)
+![image](https://github.com/user-attachments/assets/acd6cf0a-e349-4ecc-b0e7-b6681b9e752f)
 
 This is a library which converts markdown to XAML.
 In the solution there is also a demo application to play around with the parser.
