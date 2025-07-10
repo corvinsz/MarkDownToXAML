@@ -75,7 +75,7 @@
                     </StackPanel>
                 </TabItem.Header>
                 <ScrollViewer HorizontalScrollBarVisibility="auto" VerticalScrollBarVisibility="Auto">
-                    <TextBlock Text="{Binding GeneratedXAMLCode}" />
+                    <TextBox IsReadOnly="True" Text="{Binding GeneratedXAMLCode}" />
                 </ScrollViewer>
             </TabItem>
         </TabControl>

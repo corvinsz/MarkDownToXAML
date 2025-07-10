@@ -7,38 +7,37 @@ public static class XAMLHelper
 {
 	public static T LoadXaml<T>(string xaml)
 	{
-		using (var stringReader = new System.IO.StringReader(xaml))
-		using (var xmlReader = System.Xml.XmlReader.Create(stringReader))
-			return (T)System.Windows.Markup.XamlReader.Load(xmlReader);
+		using var stringReader = new System.IO.StringReader(xaml);
+		using var xmlReader = System.Xml.XmlReader.Create(stringReader);
+		return (T)System.Windows.Markup.XamlReader.Load(xmlReader);
 	}
 
-	public static T FindChild<T>(this DependencyObject parent, string childName)
+	public static T? FindChild<T>(this DependencyObject parent, string childName)
 		   where T : DependencyObject
 	{
 		// Confirm parent and childName are valid. 
 		if (parent == null) return null;
 
-		T foundChild = null;
+		T? foundChild = null;
 
 		int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
 		for (int i = 0; i < childrenCount; i++)
 		{
 			var child = VisualTreeHelper.GetChild(parent, i);
 			// If the child is not of the request child type child
-			T childType = child as T;
-			if (childType == null)
+			T? childType = child as T;
+			if (childType is null)
 			{
 				// recursively drill down the tree
 				foundChild = FindChild<T>(child, childName);
 
 				// If the child is found, break so we do not overwrite the found child. 
-				if (foundChild != null) break;
+				if (foundChild is not null) break;
 			}
 			else if (!string.IsNullOrEmpty(childName))
 			{
-				var frameworkElement = child as FrameworkElement;
 				// If the child's name is set for search
-				if (frameworkElement != null && frameworkElement.Name == childName)
+				if (child is FrameworkElement frameworkElement && frameworkElement.Name == childName)
 				{
 					// if the child's name is of the request name
 					foundChild = (T)child;
@@ -55,16 +54,16 @@ public static class XAMLHelper
 
 		return foundChild;
 	}
-	public static T FindChild<T>(this DependencyObject depObj) where T : DependencyObject
+	public static T? FindChild<T>(this DependencyObject depObj) where T : DependencyObject
 	{
-		if (depObj == null) return null;
+		if (depObj is null) return null;
 
 		for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
 		{
 			var child = VisualTreeHelper.GetChild(depObj, i);
 
 			var result = (child as T) ?? FindChild<T>(child);
-			if (result != null) return result;
+			if (result is not null) return result;
 		}
 		return null;
 	}
@@ -74,7 +73,7 @@ public static class XAMLHelper
 	/// <typeparam name="T"></typeparam>
 	/// <param name="current"></param>
 	/// <returns></returns>
-	public static T FindParent<T>(DependencyObject current) where T : DependencyObject
+	public static T? FindParent<T>(DependencyObject current) where T : DependencyObject
 	{
 		do
 		{
@@ -83,7 +82,7 @@ public static class XAMLHelper
 				return ancestor;
 			}
 			current = VisualTreeHelper.GetParent(current);
-		} while (current != null);
+		} while (current is not null);
 
 		return null;
 	}

@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Example.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
   </ItemGroup>
@@ -16,6 +20,12 @@
   <ItemGroup>
     <ProjectReference Include="..\MarkDownToXAML.Shared\MarkDownToXAML.Shared.csproj" />
     <ProjectReference Include="..\MarkDownToXAML\MarkDownToXAML.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Example.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
