@@ -5,16 +5,14 @@ namespace MarkDownToXAML;
 
 public static class MarkDownParser
 {
-	private const string _separator = $"  <Border BorderThickness=\"0,1,0,0\" BorderBrush=\"White\" Opacity=\"0.1\" />";
+	private const string _separator = """  <Border BorderThickness="0,1,0,0" BorderBrush="White" Opacity="0.1" />""";
 
 	public static string Parse(string markdown, MarkDownParserOptions? options = null)
 	{
 		options ??= MarkDownParserOptions.Default;
 
 		var xamlBuilder = new StringBuilder();
-		xamlBuilder.Append("<StackPanel xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'>\n");
-
-		const string separator = $"  <Border BorderThickness=\"0,1,0,0\" BorderBrush=\"White\" Opacity=\"0.1\" />";
+		xamlBuilder.Append("""<StackPanel xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'>\n""");
 
 		// Split markdown into lines
 		var lines = markdown.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
@@ -24,27 +22,27 @@ public static class MarkDownParser
 			// Headers
 			if (line.StartsWith("### "))
 			{
-				xamlBuilder.AppendLine($"  <TextBlock FontSize=\"18\" FontWeight=\"Bold\">{EscapeXaml(TrimMarkdownSyntax(line, "###"))}</TextBlock>");
+				xamlBuilder.AppendLine($"""  <TextBlock FontSize="18" FontWeight="Bold">{EscapeXaml(TrimMarkdownSyntax(line, "###"))}</TextBlock>""");
 				xamlBuilder.AppendLine(_separator);
 			}
 			else if (line.StartsWith("## "))
 			{
-				xamlBuilder.AppendLine($"  <TextBlock FontSize=\"24\" FontWeight=\"Bold\">{EscapeXaml(TrimMarkdownSyntax(line, "##"))}</TextBlock>");
+				xamlBuilder.AppendLine($"""  <TextBlock FontSize="24" FontWeight="Bold">{EscapeXaml(TrimMarkdownSyntax(line, "##"))}</TextBlock>""");
 				xamlBuilder.AppendLine(_separator);
 			}
 			else if (line.StartsWith("# "))
 			{
-				xamlBuilder.AppendLine($"  <TextBlock FontSize=\"32\" FontWeight=\"Bold\">{EscapeXaml(TrimMarkdownSyntax(line, "#"))}</TextBlock>");
+				xamlBuilder.AppendLine($"""  <TextBlock FontSize="32" FontWeight="Bold">{EscapeXaml(TrimMarkdownSyntax(line, "#"))}</TextBlock>""");
 				xamlBuilder.AppendLine(_separator);
 			}
 			// Checkboxes
 			else if (line.StartsWith("- [ ]"))
 			{
-				xamlBuilder.AppendLine($"  <CheckBox Content=\"{EscapeXaml(TrimMarkdownSyntax(line, "- [ ]"))}\" IsChecked=\"False\" />");
+				xamlBuilder.AppendLine($"""  <CheckBox Content="{EscapeXaml(TrimMarkdownSyntax(line, "- [ ]"))}" IsChecked="False" />""");
 			}
 			else if (line.StartsWith("- [x]") || line.StartsWith("- [X]"))
 			{
-				xamlBuilder.AppendLine($"  <CheckBox Content=\"{EscapeXaml(TrimMarkdownSyntax(line, "- [x]", "- [X]"))}\" IsChecked=\"True\" />");
+				xamlBuilder.AppendLine($"""  <CheckBox Content="{EscapeXaml(TrimMarkdownSyntax(line, "- [x]", "- [X]"))}" IsChecked="True" />""");
 			}
 			// Images
 			else if (line.StartsWith("!["))
@@ -54,22 +52,22 @@ public static class MarkDownParser
 			// Bold
 			else if (line.Contains("**"))
 			{
-				xamlBuilder.AppendLine($"  <TextBlock>{ParseInlineElements(line)}</TextBlock>");
+				xamlBuilder.AppendLine($"""  <TextBlock>{ParseInlineElements(line)}</TextBlock>""");
 			}
 			// Italic
 			else if (line.Contains("*"))
 			{
-				xamlBuilder.AppendLine($"  <TextBlock>{ParseInlineElements(line)}</TextBlock>");
+				xamlBuilder.AppendLine($"""  <TextBlock>{ParseInlineElements(line)}</TextBlock>""");
 			}
 			// Regular lists
 			else if (line.StartsWith("- "))
 			{
-				xamlBuilder.AppendLine($"  <TextBlock Text=\"• {EscapeXaml(TrimMarkdownSyntax(line, "-"))}\" />");
+				xamlBuilder.AppendLine($"""  <TextBlock Text="• {EscapeXaml(TrimMarkdownSyntax(line, "-"))}" />""");
 			}
 			// Regular paragraph
 			else
 			{
-				xamlBuilder.AppendLine($"  <TextBlock>{EscapeXaml(line)}</TextBlock>");
+				xamlBuilder.AppendLine($"""  <TextBlock>{EscapeXaml(line)}</TextBlock>""");
 			}
 		}
 
@@ -119,17 +117,14 @@ public static class MarkDownParser
 
 			if (File.Exists(imageUrl) == false)
 			{
-				throw new FileNotFoundException($"Image not found: {imageUrl}");
+				return $"""<TextBlock Text="{altText}" FontStyle="Italic" FontSize="12" Foreground="Gray" />""";
 			}
 
 			// Return an Image XAML element
-			return $"  <StackPanel>" +
-				   $"    <Image Source=\"{imageUrl}\" Stretch=\"Uniform\" Height=\"200\" Width=\"400\" />" +
-				   $"    <TextBlock Text=\"{altText}\" FontStyle=\"Italic\" FontSize=\"12\" Foreground=\"Gray\" />" +
-				   $"  </StackPanel>";
+			return $"""<Image Source="{imageUrl}" Stretch="Uniform" Height="200" Width="400" />""";
 		}
 
-		// If no image syntax found, return as regular text
-		return $"  <TextBlock>{EscapeXaml(line)}</TextBlock>";
+		// If no image syntax found, throw exception
+		throw new InvalidDataException($"Invalid image syntax in line: {line}. Basic markdown syntax is expected.");
 	}
 }
