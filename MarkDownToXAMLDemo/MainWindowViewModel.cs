@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MarkDownToXAML;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace MarkDownToXAMLDemo;
@@ -18,9 +20,14 @@ public partial class MainWindowViewModel : ObservableObject
 
 	partial void OnMarkdownTextChanged(string value)
 	{
+		MarkDownParserOptions options = new MarkDownParserOptions
+		{
+			ImageFolder = @"..\..\..\Images"
+		};
+
 		try
 		{
-			string xaml = MarkDownToXAML.MarkDownParser.Parse(value);
+			string xaml = MarkDownToXAML.MarkDownParser.Parse(value, options);
 
 			GeneratedXAML = MarkDownToXAML.Shared.XAMLHelper.LoadXaml<StackPanel>(xaml);
 			GeneratedXAMLCode = xaml;
@@ -28,6 +35,7 @@ public partial class MainWindowViewModel : ObservableObject
 		}
 		catch (Exception ex)
 		{
+			MessageBox.Show(ex.ToString());
 			IsMarkdownValid = false;
 		}
 	}

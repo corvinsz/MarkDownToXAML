@@ -12,3 +12,5 @@ This is a **bold** text and this is *italic* text.
 - [x] ToDo3
 - [x] ToDo4
 - [ ] ToDo5
+
+![alt text](Example.png)
