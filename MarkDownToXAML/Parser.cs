@@ -14,8 +14,10 @@ public static class MarkDownParser
 		var xamlBuilder = new StringBuilder();
 		xamlBuilder.Append("<StackPanel xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'>\n");
 
+		const string separator = $"  <Border BorderThickness=\"0,1,0,0\" BorderBrush=\"White\" Opacity=\"0.1\" />";
+
 		// Split markdown into lines
-		string[] lines = markdown.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
+		var lines = markdown.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
 		foreach (string line in lines)
 		{
@@ -71,26 +73,26 @@ public static class MarkDownParser
 			}
 		}
 
-		xamlBuilder.Append("</StackPanel>");
-		return xamlBuilder.ToString();
-	}
+        xamlBuilder.Append("</StackPanel>");
+        return xamlBuilder.ToString();
+    }
 
-	private static string TrimMarkdownSyntax(string line, params string[] syntax)
-	{
-		foreach (var syn in syntax)
-		{
-			if (line.StartsWith(syn))
-			{
-				return line.Substring(syn.Length).Trim();
-			}
-		}
-		return line.Trim();
-	}
+    private static string TrimMarkdownSyntax(string line, params string[] syntax)
+    {
+        foreach (var syn in syntax)
+        {
+            if (line.StartsWith(syn))
+            {
+                return line.Substring(syn.Length).Trim();
+            }
+        }
+        return line.Trim();
+    }
 
-	private static string EscapeXaml(string text)
-	{
-		return text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
-	}
+    private static string EscapeXaml(string text)
+    {
+        return text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+    }
 
 	private static string ParseInlineElements(string line)
 	{
